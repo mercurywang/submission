@@ -29,11 +29,12 @@ export const PersonForm = ({
   </form>
 );
 
-export const Persons = ({ persons }) => (
+export const Persons = ({ persons, deleteById }) => (
   <>
-    {persons.map(({ name, number }, idx) => (
-      <div key={idx}>
-        {name} {number}
+    {persons.map(({ name, number, id }) => (
+      <div key={id}>
+        {name} {number}{' '}
+        <button onClick={() => deleteById(id, name)}>delete</button>
       </div>
     ))}
   </>

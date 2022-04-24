@@ -47,12 +47,14 @@ const App = () => {
   const [countriesToShow, setCountriesToShow] = useState([]);
   const [detailedInfo, setDetailedInfo] = useState(null);
 
-  useEffect(() => {
+  const fetchData = () => {
     axios.get('https://restcountries.com/v3.1/all').then((response) => {
       setCountries(response.data);
       setPlaceholder('Ready to search');
     });
-  }, []);
+  };
+
+  useEffect(fetchData, []);
 
   const extractDetailsToShow = (fullInfo) => ({
     id: fullInfo.cioc,
@@ -60,7 +62,7 @@ const App = () => {
     capital: fullInfo.capital[0],
     population: fullInfo.population,
     languages: fullInfo.languages,
-    flag: fullInfo.flags.svg,
+    flag: fullInfo.flags.svg
   });
 
   const ifIncluded = (full, part) =>
@@ -116,7 +118,7 @@ const App = () => {
       {countriesToShow.length > 1 && (
         <CountryList countries={countriesToShow} onClick={handleToShow} />
       )}
-      <Hint hint={hint} />
+      {hint && <Hint hint={hint} />}
     </div>
   );
 };

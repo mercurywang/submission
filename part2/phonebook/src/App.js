@@ -1,6 +1,7 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Filter, PersonForm, Persons } from './component';
+import personService from './services/persons';
+import { ifContainsString, isDuplicated } from './util';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -9,12 +10,14 @@ const App = () => {
   const [filterInput, setFilterInput] = useState('');
   const [personsToShow, setPersonsToShow] = useState(persons);
 
-  useEffect(() => {
-    axios.get('http://localhost:3001/persons').then((response) => {
-      setPersons(response.data);
-      setPersonsToShow(response.data);
+  const fetchInitialData = () => {
+    personService.getAll().then((initialData) => {
+      setPersons(initialData);
+      setPersonsToShow(initialData);
     });
-  }, []);
+  };
+
+  useEffect(fetchInitialData, []);
 
   const handleNameChange = (event) => setNewName(event.target.value);
 
@@ -23,36 +26,62 @@ const App = () => {
   const handleFilterChange = (event) => {
     const val = event.target.value;
     setFilterInput(val);
-    const filtered = persons.filter(
-      ({ name }) => name.toLowerCase().indexOf(val.toLowerCase()) >= 0
-    );
+    const filtered = persons.filter(({ name }) => ifContainsString(name, val));
     setPersonsToShow(filtered.length > 0 ? filtered : persons);
-  };
-
-  const isDuplicated = () => {
-    let exist = false;
-    for (let i = 0; i < persons.length; i++) {
-      if (newName === persons[i].name) {
-        exist = true;
-      }
-    }
-    return exist;
   };
 
   const handleAddName = (event) => {
     event.preventDefault();
-    if (isDuplicated()) {
-      alert(`${newName} is already added to phonebook`);
-    } else {
-      const newPerson = {
-        name: newName,
-        number: newNumber,
-        id: persons.length + 1,
-      };
-      setPersons(persons.concat(newPerson));
+    if (isDuplicated(persons, newName, 'name')) {
+      const message = `${newName} is already added to phonebook, replace the old number with a new one?`;
+      if (window.confirm(message)) {
+        const personToUpdate = persons.find(
+          (p) => p.name.toLowerCase() === newName.toLowerCase()
+        );
+        const changeInfo = { ...personToUpdate, number: newNumber };
+        personService
+          .update(personToUpdate.id, changeInfo)
+          .then((updatedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== personToUpdate.id ? person : updatedPerson
+              )
+            );
+            setPersonsToShow(
+              personsToShow.map((person) =>
+                person.id !== personToUpdate.id ? person : updatedPerson
+              )
+            );
+          });
+      } else {
+        const newPerson = {
+          name: newName,
+          number: newNumber
+        };
+        personService.create(newPerson).then((returnedData) => {
+          setPersons(persons.concat(returnedData));
+          setPersonsToShow(personsToShow.concat(returnedData));
+        });
+      }
+
+      setNewName('');
+      setNewNumber('');
     }
-    setNewName('');
-    setNewNumber('');
+  };
+
+  const handleDelete = (id, name) => {
+    const message = `Delete ${name}?`;
+    if (window.confirm(message)) {
+      personService
+        .deleteById(id)
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+          setPersonsToShow(personsToShow.filter((person) => person.id !== id));
+        })
+        .catch(() => {
+          alert(`the person '${name}' was already deleted from server`);
+        });
+    }
   };
 
   return (
@@ -68,7 +97,7 @@ const App = () => {
         onClick={handleAddName}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} deleteById={handleDelete} />
     </div>
   );
 };

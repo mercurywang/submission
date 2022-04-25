@@ -33,9 +33,17 @@ export const Persons = ({ persons, deleteById }) => (
   <>
     {persons.map(({ name, number, id }) => (
       <div key={id}>
-        {name} {number}{' '}
+        {name} {number}
         <button onClick={() => deleteById(id, name)}>delete</button>
       </div>
     ))}
   </>
 );
+
+export const Notification = ({ message = null, className }) => {
+  if (message === null) {
+    return null;
+  }
+
+  return <div className={`message ${className || ''}`}>{message}</div>;
+};

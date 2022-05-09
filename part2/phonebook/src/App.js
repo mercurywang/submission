@@ -8,13 +8,11 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filterInput, setFilterInput] = useState('');
-  const [personsToShow, setPersonsToShow] = useState(persons);
   const [errorMessage, setErrorMessage] = useState(null);
 
   const fetchInitialData = () => {
     personService.getAll().then((initialData) => {
       setPersons(initialData);
-      setPersonsToShow(initialData);
     });
   };
 
@@ -27,8 +25,6 @@ const App = () => {
   const handleFilterChange = (event) => {
     const val = event.target.value;
     setFilterInput(val);
-    const filtered = persons.filter(({ name }) => ifContainsString(name, val));
-    setPersonsToShow(filtered);
   };
 
   const handleAddName = (event) => {
@@ -48,11 +44,6 @@ const App = () => {
               person.id !== personToUpdate.id ? person : updatedPerson
             );
             setPersons(all);
-
-            const toShow = personsToShow.map((person) =>
-              person.id !== personToUpdate.id ? person : updatedPerson
-            );
-            setPersonsToShow(toShow);
           });
       }
     } else {
@@ -60,17 +51,27 @@ const App = () => {
         name: newName,
         number: newNumber
       };
-      personService.create(newPerson).then((returnedData) => {
-        setErrorMessage({
-          message: `Added ${newName}`,
-          className: 'notification'
+      personService
+        .create(newPerson)
+        .then((returnedData) => {
+          setErrorMessage({
+            message: `Added ${newName}`,
+            className: 'notification'
+          });
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
+          setPersons(persons.concat(returnedData));
+        })
+        .catch((error) => {
+          setErrorMessage({
+            message: error.response.data,
+            className: 'error'
+          });
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
         });
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
-        setPersons(persons.concat(returnedData));
-        setPersonsToShow(personsToShow.concat(returnedData));
-      });
     }
 
     setNewName('');
@@ -84,7 +85,6 @@ const App = () => {
         .deleteById(id)
         .then(() => {
           setPersons(persons.filter((person) => person.id !== id));
-          setPersonsToShow(personsToShow.filter((person) => person.id !== id));
         })
         .catch(() => {
           setErrorMessage({
@@ -98,6 +98,10 @@ const App = () => {
         });
     }
   };
+
+  const personsToShow = persons.filter(({ name }) =>
+    ifContainsString(name, filterInput)
+  );
 
   return (
     <div>

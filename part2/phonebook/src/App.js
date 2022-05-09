@@ -44,6 +44,15 @@ const App = () => {
               person.id !== personToUpdate.id ? person : updatedPerson
             );
             setPersons(all);
+          })
+          .catch((error) => {
+            setErrorMessage({
+              message: error.response.data,
+              className: 'error'
+            });
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000);
           });
       }
     } else {

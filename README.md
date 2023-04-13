@@ -8,16 +8,16 @@
 - unicafe
 - anecdotes
 
-###Part2 Part 2
+### Part2 Part 2
 
 - phonebook
 - countries
 
-###Part3 Programming a server with NodeJS and Express
+### Part3 Programming a server with NodeJS and Express
 
 - [phonebook](https://github.com/mercurywang/phonebook) (a dedicated git repository)
 
-###Part4_5 Testing Express servers, user administration, Testing React apps
+### Part4_5 Testing Express servers, user administration, Testing React apps
 
 - blog-server
 - blog-client

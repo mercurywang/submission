@@ -3,88 +3,115 @@ import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import Toggle from './components/Toggle'
-import blogService from './services/blogs'
 import loginService from './services/login'
 import NotificationContext from './NotificationContext'
+import UserContext from './UserContext'
+import Button from '@mui/material/Button'
+import {
+  Routes,
+  Route,
+  useNavigate,
+  Navigate,
+  useLocation,
+} from 'react-router-dom'
+import { Navigation } from './components/Navigation'
+import { UserList } from './components/UserList'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
-  const [notification, dispatch] = useContext(NotificationContext)
+  const [notification, dispatchNotification] = useContext(NotificationContext)
+  const [user, dispatchUser] = useContext(UserContext)
+
+  const navigate = useNavigate()
+
+  const location = useLocation()
 
   useEffect(() => {
-    const USER = JSON.parse(window.localStorage.getItem('loggedBloglistUser'))
-
-    blogService.setToken(USER?.token)
-    setUser(USER)
+    dispatchUser({ type: '' })
   }, [])
+
+  useEffect(() => {}, [location])
 
   const func = {
     handleLogin: async (event) => {
       event.preventDefault()
       try {
-        const user = await loginService.login({
+        const _user = await loginService.login({
           username,
           password,
         })
 
-        window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
-
-        blogService.setToken(user.token)
-        setUser(user)
+        dispatchUser({ type: 'LOGIN', user: _user })
         setUsername('')
         setPassword('')
+        navigate('/')
       } catch (error) {
-        dispatch({
+        dispatchNotification({
           type: 'SHOW',
           message: 'Invalid credentials',
           className: 'error',
         })
 
         setTimeout(() => {
-          dispatch({ type: 'HIDE' })
+          dispatchNotification({ type: 'HIDE' })
         }, 5000)
         return
       }
     },
 
     handleLogout: () => {
-      setUser(null)
-      window.localStorage.clear()
+      dispatchUser({ type: 'LOG_OUT' })
+      navigate('/login')
     },
   }
 
-  const loginForm = () => (
-    <Toggle buttonLabel="login">
-      <LoginForm
-        username={username}
-        password={password}
-        handleUsernameChange={({ target }) => setUsername(target.value)}
-        handlePasswordChange={({ target }) => setPassword(target.value)}
-        handleLogin={func.handleLogin}
-      />
-    </Toggle>
-  )
-
   return (
-    <div>
-      <h2>Blogs</h2>
+    <>
+      <h2 className="text-3xl font-bold">Blogs</h2>
       <Notification {...notification} />
-
-      {user === null ? (
-        loginForm()
-      ) : (
-        <>
-          <p>
-            {user?.name} logged in
-            <button onClick={func.handleLogout}>logout</button>
-          </p>
-          <BlogList />
-        </>
+      {user && (
+        <p>
+          <Navigation />
+          {user?.name} logged in
+          <Button
+            size="small"
+            className="ml-6"
+            variant="contained"
+            onClick={func.handleLogout}
+          >
+            logout
+          </Button>
+        </p>
       )}
-    </div>
+
+      <Routes>
+        <Route path="/" element={<>home</>} />
+        <Route path="/users" element={<UserList type="list" />} />
+        <Route path="/users/:id" element={<UserList type="details" />} />
+        <Route
+          path="/blogs"
+          element={user ? <BlogList /> : <Navigate replace to="/login" />}
+        />
+        <Route path="/*" element={<Navigate replace to="/login" />} />
+
+        <Route
+          path="/login"
+          element={
+            <Toggle buttonLabel="Login">
+              <LoginForm
+                username={username}
+                password={password}
+                handleUsernameChange={({ target }) => setUsername(target.value)}
+                handlePasswordChange={({ target }) => setPassword(target.value)}
+                handleLogin={func.handleLogin}
+              />
+            </Toggle>
+          }
+        />
+      </Routes>
+    </>
   )
 }
 

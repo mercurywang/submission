@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext } from 'react'
+import UserContext from '../UserContext'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 const Blog = ({ blog, handleLikeClick, handleDelete }) => {
-  const [hide, setHide] = useState(true)
-  const [user, setUser] = useState(null)
+  // const [hide, setHide] = useState(true)
+  const user = useContext(UserContext)[0]
 
-  const toggleVisibility = () => setHide(!hide)
+  // const toggleVisibility = () => setHide(!hide)
 
   const blogStyle = {
     paddingTop: 10,
@@ -22,38 +27,35 @@ const Blog = ({ blog, handleLikeClick, handleDelete }) => {
     user: relatedUser,
   } = blog ?? {}
 
-  useEffect(() => {
-    const USER = JSON.parse(window.localStorage.getItem('loggedBloglistUser'))
-
-    setUser(USER)
-  }, [])
-
   return (
     <div style={blogStyle}>
       <div className="blogTitle">
         {title} {author}
-        <button onClick={toggleVisibility}>{hide ? 'View' : 'Hide'}</button>
+        {/* <Button size="small" variant="contained" onClick={toggleVisibility}>
+          {hide ? 'View' : 'Hide'}
+        </Button> */}
       </div>
-      <div style={{ display: hide ? 'none' : '' }} className="blogContent">
-        <p className="blogUrl">{url}</p>
-        <p className="blogLikes">
-          {`likes ${likes}`}
-          <button onClick={handleLikeClick}>like</button>
-        </p>
-        <p>{user?.name}</p>
-        {user?.userId === relatedUser?.id && (
-          <button
-            onClick={handleDelete}
-            style={{
-              background: 'lightblue',
-              border: '1px solid grey',
-              borderRadius: '5px',
-            }}
-          >
-            remove
-          </button>
-        )}
-      </div>
+      <p className="blogUrl">{url}</p>
+      <p className="blogLikes">
+        {`likes ${likes}`}
+        <IconButton
+          color="primary"
+          aria-label="Thumb Up"
+          onClick={handleLikeClick}
+        >
+          <ThumbUpOffAltIcon />
+        </IconButton>
+      </p>
+      <p>{user?.name}</p>
+      {user?.userId === relatedUser?.id && (
+        <Button
+          variant="outlined"
+          onClick={handleDelete}
+          startIcon={<DeleteIcon />}
+        >
+          Remove
+        </Button>
+      )}
     </div>
   )
 }

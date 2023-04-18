@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState, useContext } from 'react'
-import Blog from './Blog'
+// import Blog from './Blog'
 import BlogForm from './BlogForm'
 import Toggle from './Toggle'
 import blogService from '../services/blogs'
 import { useQuery } from 'react-query'
 import NotificationContext from '../NotificationContext'
+import { Link } from 'react-router-dom'
 
 const BlogList = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,7 +14,7 @@ const BlogList = () => {
   const blogQuery = useQuery('blogs', () => blogService.getAll())
 
   useEffect(() => {
-    if (blogQuery.isSuccess) {
+    if (blogQuery.isSuccess && blogQuery.data) {
       const _blogs = [...blogQuery.data]
 
       _blogs.sort((a, b) => {
@@ -74,13 +75,14 @@ const BlogList = () => {
       <Toggle buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm createBlog={func.addBlog} />
       </Toggle>
-      {blogs?.map((blog, index) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLikeClick={() => func.updateBlog(blog, index)}
-          handleDelete={() => func.deleteBlog(blog, index)}
-        />
+      {blogs?.map((blog) => (
+        // <Blog
+        //   key={blog.id}
+        //   blog={blog}
+        //   handleLikeClick={() => func.updateBlog(blog, index)}
+        //   handleDelete={() => func.deleteBlog(blog, index)}
+        // />
+        <Link key={blog.id} to={`/blogs/${blog.id}`}></Link>
       ))}
     </>
   )

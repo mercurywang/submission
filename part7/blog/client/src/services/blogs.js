@@ -41,6 +41,17 @@ const update = async (modifyBlog) => {
   return response.data
 }
 
+const getById = async (id) => {
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  }
+  const response = await axios.get(`${baseUrl}/${id}`, config)
+
+  return response.data
+}
+
 const deleteById = async (id) => {
   const config = {
     headers: {
@@ -51,4 +62,26 @@ const deleteById = async (id) => {
   return {}
 }
 
-export default { getAll, create, setToken, update, deleteById }
+const addComment = async (modifyBlog) => {
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  }
+  const response = await axios.put(
+    `${baseUrl}/${modifyBlog.id}/comments`,
+    modifyBlog,
+    config
+  )
+  return response.data
+}
+
+export default {
+  getAll,
+  create,
+  setToken,
+  update,
+  getById,
+  deleteById,
+  addComment,
+}

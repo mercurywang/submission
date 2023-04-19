@@ -14,6 +14,7 @@ import {
   Navigate,
   useLocation,
 } from 'react-router-dom'
+import Blog from './components/Blog'
 import { Navigation } from './components/Navigation'
 import { UserList } from './components/UserList'
 
@@ -93,6 +94,10 @@ const App = () => {
         <Route
           path="/blogs"
           element={user ? <BlogList /> : <Navigate replace to="/login" />}
+        />
+        <Route
+          path="/blogs/:id"
+          element={user ? <Blog /> : <Navigate replace to="/login" />}
         />
         <Route path="/*" element={<Navigate replace to="/login" />} />
 

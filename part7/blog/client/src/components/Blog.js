@@ -1,61 +1,65 @@
-import React, { useContext } from 'react'
-import UserContext from '../UserContext'
-import Button from '@mui/material/Button'
+import React, { useEffect, useState } from 'react'
 import IconButton from '@mui/material/IconButton'
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt'
-import DeleteIcon from '@mui/icons-material/Delete'
+import blogService from '../services/blogs'
+import { useMatch } from 'react-router-dom'
+import CommentForm from './Comment'
 
-const Blog = ({ blog, handleLikeClick, handleDelete }) => {
-  // const [hide, setHide] = useState(true)
-  const user = useContext(UserContext)[0]
+const Blog = () => {
+  const [blog, setBlog] = useState(null)
 
-  // const toggleVisibility = () => setHide(!hide)
+  const match = useMatch('/blogs/:id')
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
+  useEffect(() => {
+    const getBlogById = async () => {
+      const _blog = await blogService.getById(match.params.id)
+      setBlog(_blog)
+    }
+    getBlogById()
+  }, [])
+
+  const updateBlog = async () => {
+    const updatedBlog = await blogService.update({
+      ...blog,
+      likes: blog.likes + 1,
+    })
+    setBlog(updatedBlog)
   }
 
-  const {
-    title = '',
-    author = '',
-    likes = 0,
-    url = '',
-    user: relatedUser,
-  } = blog ?? {}
+  const addComment = async (comment) => {
+    const updatedBlog = await blogService.addComment({
+      ...blog,
+      comments: [...(blog.comments || []), comment],
+    })
+    setBlog(updatedBlog)
+  }
+
+  if (!blog) {
+    return <>loading....</>
+  }
 
   return (
-    <div style={blogStyle}>
-      <div className="blogTitle">
-        {title} {author}
-        {/* <Button size="small" variant="contained" onClick={toggleVisibility}>
-          {hide ? 'View' : 'Hide'}
-        </Button> */}
-      </div>
-      <p className="blogUrl">{url}</p>
-      <p className="blogLikes">
-        {`likes ${likes}`}
-        <IconButton
-          color="primary"
-          aria-label="Thumb Up"
-          onClick={handleLikeClick}
-        >
+    <div>
+      <h3 className="blogTitle">
+        {blog?.title} by {blog?.author}
+      </h3>
+      <a href={blog?.url}>{blog?.url}</a>
+      <div>
+        {`likes ${blog?.likes}`}
+        <IconButton color="primary" aria-label="Thumb Up" onClick={updateBlog}>
           <ThumbUpOffAltIcon />
         </IconButton>
-      </p>
-      <p>{user?.name}</p>
-      {user?.userId === relatedUser?.id && (
-        <Button
-          variant="outlined"
-          onClick={handleDelete}
-          startIcon={<DeleteIcon />}
-        >
-          Remove
-        </Button>
-      )}
+      </div>
+      <div>Uploaded by {blog?.user?.name}</div>
+
+      <CommentForm addComment={addComment} />
+
+      <div>
+        {blog?.comments.length > 0 && 'comments below'}
+        {blog?.comments?.map((comment, idx) => (
+          <p key={idx}>{comment}</p>
+        ))}
+      </div>
     </div>
   )
 }

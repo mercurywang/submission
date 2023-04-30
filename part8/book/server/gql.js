@@ -23,6 +23,7 @@ const resolvers = require('./resolvers');
 require('dotenv').config();
 
 const MONGODB_URI = process.env.MONGODB_URI;
+const SECRET = process.env.SECRET;
 
 console.log('connecting to', MONGODB_URI);
 
@@ -74,10 +75,7 @@ const start = async () => {
       context: async ({ req }) => {
         const auth = req ? req.headers.authorization : null;
         if (auth && auth.startsWith('Bearer ')) {
-          const decodedToken = jwt.verify(
-            auth.substring(7),
-            process.env.SECRET
-          );
+          const decodedToken = jwt.verify(auth.substring(7), SECRET);
           const currentUser = await User.findById(decodedToken.id);
           return { currentUser };
         }

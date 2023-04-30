@@ -116,7 +116,7 @@ const resolvers = {
         id: user._id
       };
 
-      return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
+      return { value: jwt.sign(userForToken, process.env.SECRET) };
     }
   }
 };

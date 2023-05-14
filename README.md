@@ -37,8 +37,12 @@
 ### Part8
 
 - book
+  - client
+  - server
 
 ### Part9
+
+- bmi
 
 ### Part10
 

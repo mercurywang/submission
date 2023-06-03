@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Content } from './components/Content';
 import Header from './components/Header';
-import { DiaryEntry } from './types';
+import { DiaryEntry, NewDiaryEntry } from './types';
 import axios from 'axios';
 import { apiBaseUrl } from './constants';
 import diaryService from './services/diaries';
+import { DiaryForm } from './components/DiraryForm';
 
 const App = () => {
   const title = 'Flight Diaries';
@@ -20,8 +21,17 @@ const App = () => {
     void fetchDiaries();
   }, []);
 
+  const handleSubmit = (entire: NewDiaryEntry) => {
+    const createDiary = async () => {
+      const created = await diaryService.create(entire);
+      setContents(contents.concat(created));
+    };
+    void createDiary();
+  };
+
   return (
     <div>
+      <DiaryForm onSubmit={handleSubmit} />
       <Header name={title} />
       <Content contents={contents} />
     </div>

@@ -9,13 +9,11 @@ export interface UseFieldProps {
 export const useField = ({
   type = 'text',
   placeholder = '',
-  initialValue = undefined
-}: UseFieldProps) => {
-  const [value, setValue] = useState<string | undefined>(initialValue);
+  initialValue = ''
+}: UseFieldProps = {}) => {
+  const [value, setValue] = useState<string>(initialValue);
 
-  const onChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
   };
 

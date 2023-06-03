@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useField } from '../hooks';
 import { NewDiaryEntry, Visibility, Weather } from '../types';
 
@@ -7,21 +7,63 @@ export interface DiaryFormProps {
 }
 
 export const DiaryForm: React.FC<DiaryFormProps> = ({ onSubmit }) => {
-  const dateField = useField({})[0];
-  const weatherField = useField({})[0];
-  const visibilityField = useField({})[0];
-  const commentField = useField({})[0];
+  const dateField = useField({ type: 'date' })[0];
+  const commentField = useField()[0];
+
+  const visibilities: Visibility[] = [
+    Visibility.Great,
+    Visibility.Good,
+    Visibility.Ok,
+    Visibility.Poor
+  ];
+  const weathers: Weather[] = [
+    Weather.Cloudy,
+    Weather.Sunny,
+    Weather.Rainy,
+    Weather.Stormy,
+    Weather.Windy
+  ];
+
+  const [weather, setWeather] = useState<Weather>(Weather.Cloudy);
+  const [visibility, setVisibility] = useState<Visibility>(Visibility.Good);
 
   return (
     <>
+      <h1>New Diary</h1>
       <div>
-        date <input {...dateField} />
+        date <input name="date" {...dateField} />
       </div>
       <div>
-        weather <input {...weatherField} />
+        weather
+        {weathers.map((w, idx) => (
+          <span key={idx}>
+            <input
+              type="radio"
+              id={w}
+              name={w}
+              value={w}
+              checked={weather === w}
+              onChange={() => setWeather(w)}
+            />
+            <label htmlFor={w}>{w}</label>
+          </span>
+        ))}
       </div>
       <div>
-        visibility <input {...visibilityField} />
+        visibility
+        {visibilities.map((v, idx) => (
+          <span key={idx}>
+            <input
+              type="radio"
+              id={v}
+              name={v}
+              value={v}
+              checked={visibility === v}
+              onChange={() => setVisibility(v)}
+            />
+            <label htmlFor={v}>{v}</label>
+          </span>
+        ))}
       </div>
       <div>
         comment <input {...commentField} />
@@ -30,8 +72,8 @@ export const DiaryForm: React.FC<DiaryFormProps> = ({ onSubmit }) => {
         onClick={() => {
           const entries: NewDiaryEntry = {
             date: dateField.value,
-            weather: weatherField.value as Weather,
-            visibility: visibilityField.value as Visibility,
+            weather,
+            visibility,
             comment: commentField.value
           };
           onSubmit(entries);

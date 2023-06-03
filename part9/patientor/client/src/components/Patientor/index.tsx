@@ -1,14 +1,15 @@
 import { Typography } from '@mui/material';
 import React from 'react';
-import { Gender, Patient } from '../types';
+import { Gender, Patient } from '../../types';
 import { Female, Male, Transgender } from '@mui/icons-material';
+import { EntryList } from './EntryList';
 
 export interface PatientorProps {
   patient?: Patient;
 }
 
 export const Patientor: React.FC<PatientorProps> = ({
-  patient: { name, ssn, occupation, gender, dateOfBirth } = {}
+  patient: { name, ssn, occupation, gender, dateOfBirth, entries = [] } = {}
 }) => {
   return (
     <>
@@ -25,6 +26,8 @@ export const Patientor: React.FC<PatientorProps> = ({
       <Typography style={{ marginBottom: '0.5em' }}>
         occupation:{occupation}
       </Typography>
+
+      <EntryList entries={entries} />
     </>
   );
 };

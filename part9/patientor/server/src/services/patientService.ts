@@ -1,4 +1,4 @@
-import { Patient, NewPatient } from '../types';
+import { Patient, NewPatient, EntryWithoutId } from '../types';
 import patients from '../db/patients';
 
 import { v1 as uuid } from 'uuid';
@@ -14,4 +14,23 @@ const addPatient = (entry: NewPatient): Patient => {
   return newPatient;
 };
 
-export default { addPatient };
+const addPatientEntry = (
+  entry: EntryWithoutId,
+  patientId: string
+): Patient | {} => {
+  const newPatientEntry = {
+    id,
+    ...entry
+  };
+
+  const updatePatient = patients.find((patient) => patient.id === patientId);
+
+  if (updatePatient) {
+    updatePatient?.entries.push(newPatientEntry);
+
+    return updatePatient;
+  }
+  return {};
+};
+
+export default { addPatient, addPatientEntry };

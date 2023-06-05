@@ -8,11 +8,12 @@ import { Patient } from './types';
 
 import patientService from './services/patients';
 import PatientListPage from './components/PatientListPage';
-import { Patientor } from './components/Patientor';
+import { Patientor } from './components/PatientorPage';
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [patient, setPatient] = useState<Patient>();
+  const [refetch, setRefetch] = useState<boolean>(false);
 
   const match = useMatch('/patients/:id');
 
@@ -29,12 +30,13 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    setRefetch(false);
     const fetchPatient = async () => {
       const patient = await patientService.getById(match?.params?.id as string);
       setPatient(patient);
     };
     fetchPatient();
-  }, [location, match?.params?.id]);
+  }, [location, match?.params?.id, refetch]);
 
   return (
     <div className="App">
@@ -55,7 +57,9 @@ const App = () => {
           />
           <Route
             path="/patients/:id"
-            element={<Patientor patient={patient} />}
+            element={
+              <Patientor patient={patient} refetch={() => setRefetch(true)} />
+            }
           />
         </Routes>
       </Container>

@@ -43,6 +43,9 @@
 ### Part9
 
 - bmi
+- flight-diary
+- patientor
+- ts-app
 
 ### Part10
 

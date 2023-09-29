@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   signIn: {
-    marginLeft: 8
+    marginLeft: 24
   }
 });
 

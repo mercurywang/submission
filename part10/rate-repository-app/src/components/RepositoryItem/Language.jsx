@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
   tag: {
     backgroundColor: theme.colors.primary,
     padding: 4,
-    display: 'inline',
     borderRadius: 3
   }
 });

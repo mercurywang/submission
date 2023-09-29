@@ -5,14 +5,23 @@ const styles = StyleSheet.create({
   inputContainer: {
     padding: 12,
     borderStyle: 'solid',
-    borderColor: theme.colors.borderGray,
     borderWidth: 1,
     borderRadius: 4
+  },
+  borderGray: {
+    borderColor: theme.colors.borderGray
+  },
+  borderRed: {
+    borderColor: theme.colors.red
   }
 });
 
-const TextInput = ({ style, ...props }) => {
-  const textInputStyle = [styles.inputContainer, style];
+const TextInput = ({ style, error, ...props }) => {
+  const textInputStyle = [
+    styles.inputContainer,
+    error ? styles.borderRed : styles.borderGray,
+    style
+  ];
 
   return <NativeTextInput style={textInputStyle} {...props} />;
 };

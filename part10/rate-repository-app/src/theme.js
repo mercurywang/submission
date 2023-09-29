@@ -7,7 +7,8 @@ const theme = {
     appBar: '#24292e',
     lightGray: '#e1e4e8',
     gray: '#464646',
-    borderGray: '#868686'
+    borderGray: '#868686',
+    red: '#d73a4a'
   },
   fontSizes: {
     body: 14,

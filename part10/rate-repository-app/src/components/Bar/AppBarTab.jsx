@@ -1,5 +1,5 @@
 import { Pressable, Alert } from 'react-native';
-import Text from './Text';
+import Text from '../Common/Text';
 
 const AppBarTab = (props) => {
   const handlePress = () => {

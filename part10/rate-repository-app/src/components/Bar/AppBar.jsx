@@ -1,11 +1,11 @@
 import { View, StyleSheet } from 'react-native';
-import theme from '../theme';
+import theme from '../../theme';
 import AppBarTab from './AppBarTab';
 
 const styles = StyleSheet.create({
   container: {
     padding: 12,
-    paddingTop: 36,
+    paddingTop: 64,
     paddingBottom: 24,
     backgroundColor: theme.colors.appBar
   }

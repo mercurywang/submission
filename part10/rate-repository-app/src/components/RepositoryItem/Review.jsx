@@ -10,11 +10,19 @@ const styles = StyleSheet.create({
   }
 });
 
+const formatCount = (count) => {
+  if (count < 1000) {
+    return count;
+  }
+  const dividedByThousand = (count / 1000).toFixed(1);
+  return dividedByThousand + 'k';
+};
+
 const Review = ({ stars, forks, reviews, rating }) => {
   return (
     <View style={styles.container}>
-      <Expression main={stars} sub="Stars" align="alignCenter" />
-      <Expression main={forks} sub="Forks" align="alignCenter" />
+      <Expression main={formatCount(stars)} sub="Stars" align="alignCenter" />
+      <Expression main={formatCount(forks)} sub="Forks" align="alignCenter" />
       <Expression main={reviews} sub="Review" align="alignCenter" />
       <Expression main={rating} sub="Rating" align="alignCenter" />
     </View>

@@ -20,11 +20,6 @@ const RepositoryItem = (props) => {
         description={props.description}
       />
       <Language language={props.language} />
-      {/* <Text>Stars: {props.stargazersCount}</Text>
-      <Text>Forks: {props.forksCount}</Text>
-      <Text>Review: {props.reviewCount}</Text>
-      <Text>Rating: {props.ratingAverage}</Text> */}
-
       <Review
         stars={props.stargazersCount}
         forks={props.forksCount}

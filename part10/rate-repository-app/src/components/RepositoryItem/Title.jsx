@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
   },
   instruction: {
     paddingLeft: 16,
-    paddingTop: 4
+    paddingTop: 4,
+    flexShrink: 1
   },
   paddingTop: {
     paddingTop: 8

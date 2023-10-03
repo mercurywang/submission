@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
 
 const Expression = ({ main, sub, align }) => {
   const expressionStyles = [
+    // styles.container,
     align === 'alignCenter' && styles.alignCenter,
     align === 'alignStart' && styles.alignStart
   ];

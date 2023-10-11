@@ -30,7 +30,8 @@ export default {
       favicon: './assets/favicon.png'
     },
     extra: {
-      env: process.env.ENV
+      env: process.env.ENV,
+      uri: process.env.APOLLO_URI
     }
   }
 };

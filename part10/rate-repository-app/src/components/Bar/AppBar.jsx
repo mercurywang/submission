@@ -1,7 +1,10 @@
 import { View, StyleSheet, ScrollView } from 'react-native';
+import { Pressable } from 'react-native';
 import theme from '../../theme';
 import AppBarTab from './AppBarTab';
 import { Link } from 'react-router-native';
+import useMe from '../../hooks/useMe';
+import useAuthStorage from '../../hooks/useAuthStorage';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,6 +20,14 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const { me, client } = useMe();
+  const authStorage = useAuthStorage();
+
+  const handleSignOut = async () => {
+    await authStorage.removeAccessToken();
+    await client.resetStore();
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
@@ -24,9 +35,15 @@ const AppBar = () => {
           <AppBarTab title="Repositories" />
         </Link>
         <View style={styles.signIn}>
-          <Link to="/signIn">
-            <AppBarTab title="Sign In" />
-          </Link>
+          {!me ? (
+            <Link to="/signIn">
+              <AppBarTab title="Sign In" />
+            </Link>
+          ) : (
+            <Pressable onPress={handleSignOut}>
+              <AppBarTab title="Sign Out" />
+            </Pressable>
+          )}
         </View>
       </ScrollView>
     </View>

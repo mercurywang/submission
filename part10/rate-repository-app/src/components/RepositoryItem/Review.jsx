@@ -1,5 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import Expression from './Expression';
+import { formatCount } from '../../utils/utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -9,14 +10,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   }
 });
-
-const formatCount = (count) => {
-  if (count < 1000) {
-    return count;
-  }
-  const dividedByThousand = (count / 1000).toFixed(1);
-  return dividedByThousand + 'k';
-};
 
 const Review = ({ stars, forks, reviews, rating }) => {
   return (

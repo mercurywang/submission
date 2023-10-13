@@ -54,49 +54,32 @@ describe('RepositoryList', () => {
       const repositoryItems = screen.getAllByTestId('repositoryItem');
       const [firstRepositoryItem, secondRepositoryItem] = repositoryItems;
 
-      expect(firstRepositoryItem).toHaveTextContent(
-        repositories.edges[0].node.fullName
-      );
-      expect(firstRepositoryItem).toHaveTextContent(
-        repositories.edges[0].node.description
-      );
-      expect(firstRepositoryItem).toHaveTextContent(
-        repositories.edges[0].node.language
-      );
-      expect(firstRepositoryItem).toHaveTextContent(
-        formatCount(repositories.edges[0].node.forksCount)
-      );
-      expect(firstRepositoryItem).toHaveTextContent(
-        formatCount(repositories.edges[0].node.stargazersCount)
-      );
-      expect(firstRepositoryItem).toHaveTextContent(
-        repositories.edges[0].node.ratingAverage
-      );
-      expect(firstRepositoryItem).toHaveTextContent(
-        repositories.edges[0].node.reviewCount
-      );
+      const firstNode = repositories.edges[0].node;
+      const secondNode = repositories.edges[1].node;
 
+      expect(firstRepositoryItem).toHaveTextContent(firstNode.fullName);
+      expect(firstRepositoryItem).toHaveTextContent(firstNode.description);
+      expect(firstRepositoryItem).toHaveTextContent(firstNode.language);
+      expect(firstRepositoryItem).toHaveTextContent(
+        formatCount(firstNode.forksCount)
+      );
+      expect(firstRepositoryItem).toHaveTextContent(
+        formatCount(firstNode.stargazersCount)
+      );
+      expect(firstRepositoryItem).toHaveTextContent(firstNode.ratingAverage);
+      expect(firstRepositoryItem).toHaveTextContent(firstNode.reviewCount);
+
+      expect(secondRepositoryItem).toHaveTextContent(secondNode.fullName);
+      expect(secondRepositoryItem).toHaveTextContent(secondNode.description);
+      expect(secondRepositoryItem).toHaveTextContent(secondNode.language);
       expect(secondRepositoryItem).toHaveTextContent(
-        repositories.edges[1].node.fullName
+        formatCount(secondNode.forksCount)
       );
       expect(secondRepositoryItem).toHaveTextContent(
-        repositories.edges[1].node.description
+        formatCount(secondNode.stargazersCount)
       );
-      expect(secondRepositoryItem).toHaveTextContent(
-        repositories.edges[1].node.language
-      );
-      expect(secondRepositoryItem).toHaveTextContent(
-        formatCount(repositories.edges[1].node.forksCount)
-      );
-      expect(secondRepositoryItem).toHaveTextContent(
-        formatCount(repositories.edges[1].node.stargazersCount)
-      );
-      expect(secondRepositoryItem).toHaveTextContent(
-        repositories.edges[1].node.ratingAverage
-      );
-      expect(secondRepositoryItem).toHaveTextContent(
-        repositories.edges[1].node.reviewCount
-      );
+      expect(secondRepositoryItem).toHaveTextContent(secondNode.ratingAverage);
+      expect(secondRepositoryItem).toHaveTextContent(secondNode.reviewCount);
     });
   });
 });

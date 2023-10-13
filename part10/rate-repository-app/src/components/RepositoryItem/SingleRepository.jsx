@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
   separator: {
     height: 10
   },
+  header: {
+    marginBottom: 12
+  },
   reviewContainer: {
     backgroundColor: theme.colors.white,
     flexDirection: 'row',
@@ -73,10 +76,15 @@ const SingleRepository = () => {
 
   return (
     <FlatList
+      style={styles.listContainer}
       data={reviewNodes}
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={({ id }) => id}
-      ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      ListHeaderComponent={() => (
+        <View style={styles.header}>
+          <RepositoryInfo repository={repository} />
+        </View>
+      )}
       ItemSeparatorComponent={ItemSeparator}
     />
   );

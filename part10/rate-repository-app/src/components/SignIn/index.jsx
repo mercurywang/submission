@@ -32,7 +32,7 @@ const initialValues = { username: '', password: '' };
 
 const SignInForm = ({ onSubmit }) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="signInForm">
       <FormikTextInput name="username" placeholder="Username" />
       <View style={styles.marginTop}>
         <FormikTextInput
@@ -60,7 +60,7 @@ const validationSchema = yup.object().shape({
     .required('Password is required')
 });
 
-const SignInContainer = ({ navigate, signIn }) => {
+export const SignInContainer = ({ navigate, signIn }) => {
   const onSubmit = async (values) => {
     const { username, password } = values;
 

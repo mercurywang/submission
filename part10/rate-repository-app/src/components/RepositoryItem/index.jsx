@@ -3,6 +3,7 @@ import Title from './Title';
 import theme from '../../theme';
 import Language from './Language';
 import Review from './Review';
+import LinkageButton from './LinkageButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,6 +27,7 @@ const RepositoryItem = (props) => {
         reviews={props.reviewCount}
         rating={props.ratingAverage}
       />
+      {props.withButton && <LinkageButton label="Open in Github" />}
     </View>
   );
 };

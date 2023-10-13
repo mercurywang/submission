@@ -27,7 +27,9 @@ const RepositoryItem = (props) => {
         reviews={props.reviewCount}
         rating={props.ratingAverage}
       />
-      {props.withButton && <LinkageButton label="Open in Github" />}
+      {props.withButton && (
+        <LinkageButton label="Open in Github" link={props.url} />
+      )}
     </View>
   );
 };

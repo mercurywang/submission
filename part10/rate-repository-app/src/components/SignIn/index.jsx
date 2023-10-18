@@ -7,6 +7,13 @@ import Text from '../Common/Text';
 import FormikTextInput from '../Common/FormikTextInput';
 import theme from '../../theme';
 import useSignIn from '../../hooks/useSignIn';
+import {
+  MAX_PASSWORD_LENGTH,
+  MAX_USERNAME_LENGTH,
+  MESSAGE,
+  MIN_PASSWORD_LENGTH,
+  MIN_USERNAME_LENGTH
+} from '../../utils/const';
 
 const styles = StyleSheet.create({
   container: {
@@ -51,13 +58,14 @@ const SignInForm = ({ onSubmit }) => {
 const validationSchema = yup.object().shape({
   username: yup
     .string()
-    .min(4, 'Username must be greater or equal to 4')
-    .required('Username is required'),
+    .min(MIN_USERNAME_LENGTH, MESSAGE.USERNAME.MIN)
+    .max(MAX_USERNAME_LENGTH, MESSAGE.USERNAME.MAX)
+    .required(MESSAGE.USERNAME.REQUIRED),
   password: yup
     .string()
-    .min(6, 'Password must be between 6 and 12 digits')
-    .max(12, 'Password must be between 6 and 12 digits')
-    .required('Password is required')
+    .min(MIN_PASSWORD_LENGTH, MESSAGE.PASSWORD.HINT)
+    .max(MAX_PASSWORD_LENGTH, MESSAGE.PASSWORD.HINT)
+    .required(MESSAGE.PASSWORD.REQUIRED)
 });
 
 export const SignInContainer = ({ navigate, signIn }) => {

@@ -78,7 +78,9 @@ const RepositoryList = () => {
   };
 
   const search = (keyword) => {
-    setVariables({ ...variables, searchKeyword: keyword });
+    if (keyword) {
+      setVariables({ ...variables, searchKeyword: keyword });
+    }
   };
 
   return (

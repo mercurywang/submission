@@ -23,7 +23,10 @@ const SingleRepository = () => {
   const { repository } = useRepository();
 
   const reviewNodes = repository
-    ? repository.reviews.edges.map((edge) => edge.node)
+    ? repository.reviews.edges.map((edge) => ({
+        title: edge.node.user.username,
+        ...edge.node
+      }))
     : [];
 
   return (

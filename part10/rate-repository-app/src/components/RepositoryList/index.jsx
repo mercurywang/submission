@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-native';
 import RepositoryItem from '../RepositoryItem/index';
 import useRepositories from '../../hooks/useRepositories';
 import Sort from './Sort';
-import { useState } from 'react';
+import { useState, Component } from 'react';
+import Search from './Search';
 
 const styles = StyleSheet.create({
   separator: {
@@ -28,20 +29,33 @@ const RenderItem = ({ item }) => {
   );
 };
 
-export const RepositoryListContainer = ({ repositories, sortBy }) => {
-  const repositoryNodes = repositories
-    ? repositories.edges.map((edge) => edge.node)
-    : [];
+export class RepositoryListContainer extends Component {
+  renderHeader = () => {
+    const props = this.props;
+    return (
+      <View>
+        <Search searchKeyword={props.search} />
+        <Sort sortBy={props.sortBy} />
+      </View>
+    );
+  };
 
-  return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RenderItem item={item} />}
-      ListHeaderComponent={<Sort sortBy={sortBy} />}
-    />
-  );
-};
+  render() {
+    const props = this.props;
+    const repositoryNodes = props.repositories
+      ? props.repositories.edges.map((edge) => edge.node)
+      : [];
+
+    return (
+      <FlatList
+        data={repositoryNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item }) => <RenderItem item={item} />}
+        ListHeaderComponent={this.renderHeader}
+      />
+    );
+  }
+}
 
 const RepositoryList = () => {
   const [variables, setVariables] = useState();
@@ -63,8 +77,16 @@ const RepositoryList = () => {
     }
   };
 
+  const search = (keyword) => {
+    setVariables({ ...variables, searchKeyword: keyword });
+  };
+
   return (
-    <RepositoryListContainer repositories={repositories} sortBy={sortBy} />
+    <RepositoryListContainer
+      repositories={repositories}
+      sortBy={sortBy}
+      search={search}
+    />
   );
 };
 

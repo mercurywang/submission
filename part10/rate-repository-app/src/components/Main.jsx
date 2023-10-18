@@ -28,6 +28,7 @@ const Main = () => {
         <Route path="/signUp" element={<SignUp />} />
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/createReview" element={<CreateReview />} />
+        <Route path="/myReviews" element={<CreateReview />} />
       </Routes>
     </View>
   );

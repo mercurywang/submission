@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { format } from 'date-fns';
 
 import Text from '../Common/Text';
@@ -28,28 +28,69 @@ const styles = StyleSheet.create({
   },
   marginBottom: {
     marginBottom: 8
+  },
+  buttonBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 12,
+    paddingTop: 0,
+    backgroundColor: theme.colors.white
+  },
+  buttonContainer: {
+    borderRadius: 4,
+    backgroundColor: theme.colors.primary,
+    padding: 12,
+    flex: 1,
+    marginLeft: 4,
+    marginRight: 4
+  },
+  button: {
+    textAlign: 'center',
+    color: theme.colors.white
+  },
+  buttonRed: {
+    backgroundColor: theme.colors.red
   }
 });
 
-const ReviewItem = ({ review }) => {
+const ReviewItem = ({ review, navigate, withAction, deleteReview }) => {
   const date = format(new Date(review.createdAt), 'MM/dd/yyyy');
+
   return (
-    <View style={styles.reviewContainer}>
-      <View style={styles.rate}>
-        <Text style={styles.rateText} color="primary" fontWeight="bold">
-          {review.rating}
-        </Text>
+    <View>
+      <View style={styles.reviewContainer}>
+        <View style={styles.rate}>
+          <Text style={styles.rateText} color="primary" fontWeight="bold">
+            {review.rating}
+          </Text>
+        </View>
+        <View style={styles.details}>
+          <Text style={styles.marginBottom} fontWeight="bold">
+            {review.title}
+          </Text>
+          <Text style={styles.marginBottom} color="textGray">
+            {date}
+          </Text>
+          <Text>{review.text}</Text>
+        </View>
       </View>
-      <View style={styles.details}>
-        <Text style={styles.marginBottom} fontWeight="bold">
-          {/* {review?.user?.username || review.repository.fullName} */}
-          {review.title}
-        </Text>
-        <Text style={styles.marginBottom} color="textGray">
-          {date}
-        </Text>
-        <Text>{review.text}</Text>
-      </View>
+      {withAction && (
+        <View style={styles.buttonBox}>
+          <Pressable style={styles.buttonContainer} onPress={navigate}>
+            <Text style={styles.button} fontWeight="bold">
+              View Repository
+            </Text>
+          </Pressable>
+          <Pressable
+            style={{ ...styles.buttonContainer, ...styles.buttonRed }}
+            onPress={deleteReview}
+          >
+            <Text style={styles.button} fontWeight="bold">
+              Delete Review
+            </Text>
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 };

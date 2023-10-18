@@ -14,8 +14,11 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.appBar,
     flexDirection: 'row'
   },
-  signIn: {
-    marginLeft: 24
+  marginLeft: {
+    marginLeft: 16
+  },
+  row: {
+    flexDirection: 'row'
   }
 });
 
@@ -34,15 +37,20 @@ const AppBar = () => {
         <Link to="/">
           <AppBarTab title="Repositories" />
         </Link>
-        <View style={styles.signIn}>
+        <View style={styles.marginLeft}>
           {!me ? (
             <Link to="/signIn">
               <AppBarTab title="Sign In" />
             </Link>
           ) : (
-            <Pressable onPress={handleSignOut}>
-              <AppBarTab title="Sign Out" />
-            </Pressable>
+            <View style={styles.row}>
+              <Link to="/createReview">
+                <AppBarTab title="Create A Review" />
+              </Link>
+              <Pressable style={styles.marginLeft} onPress={handleSignOut}>
+                <AppBarTab title="Sign Out" />
+              </Pressable>
+            </View>
           )}
         </View>
       </ScrollView>

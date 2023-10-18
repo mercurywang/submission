@@ -11,6 +11,10 @@ const MESSAGE = {
   PASSWORD: {
     HINT: 'Password must be between 5 and 50 digits',
     REQUIRED: 'Password is required'
+  },
+  PASSWORD_CONFIRM: {
+    HINT: 'Password must be between 5 and 50 digits',
+    REQUIRED: 'Password confirm is required'
   }
 };
 

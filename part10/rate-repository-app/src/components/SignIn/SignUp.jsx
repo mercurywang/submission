@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-native';
 import Text from '../Common/Text';
 import FormikTextInput from '../Common/FormikTextInput';
 import theme from '../../theme';
-import useSignIn from '../../hooks/useSignIn';
+import useSignUp from '../../hooks/useSignUp';
 import {
   MAX_PASSWORD_LENGTH,
   MAX_USERNAME_LENGTH,
@@ -35,11 +35,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const initialValues = { username: '', password: '' };
+const initialValues = { username: '', password: '', passwordConfirmation: '' };
 
-const SignInForm = ({ onSubmit }) => {
+const SignUpForm = ({ onSubmit }) => {
   return (
-    <View style={styles.container} testID="signInForm">
+    <View style={styles.container}>
       <FormikTextInput name="username" placeholder="Username" />
       <FormikTextInput
         style={styles.marginTop}
@@ -47,8 +47,14 @@ const SignInForm = ({ onSubmit }) => {
         placeholder="Password"
         secureTextEntry
       />
+      <FormikTextInput
+        style={styles.marginTop}
+        name="passwordConfirm"
+        placeholder="Password confirmation"
+        secureTextEntry
+      />
       <Pressable style={styles.buttonContainer} onPress={onSubmit}>
-        <Text style={styles.button}>Sign In</Text>
+        <Text style={styles.button}>Sign Up</Text>
       </Pressable>
     </View>
   );
@@ -64,16 +70,20 @@ const validationSchema = yup.object().shape({
     .string()
     .min(MIN_PASSWORD_LENGTH, MESSAGE.PASSWORD.HINT)
     .max(MAX_PASSWORD_LENGTH, MESSAGE.PASSWORD.HINT)
-    .required(MESSAGE.PASSWORD.REQUIRED)
+    .required(MESSAGE.PASSWORD.REQUIRED),
+  passwordConfirm: yup
+    .string()
+    .oneOf([yup.ref('password'), null])
+    .required(MESSAGE.PASSWORD_CONFIRM.REQUIRED)
 });
 
-export const SignInContainer = ({ navigate, signIn }) => {
+export const SignUpContainer = ({ navigate, signUp }) => {
   const onSubmit = async (values) => {
     const { username, password } = values;
 
     try {
-      await signIn({ username, password });
-      navigate();
+      await signUp({ username, password });
+      navigate('/signIn');
     } catch (e) {
       console.log(e);
     }
@@ -85,16 +95,16 @@ export const SignInContainer = ({ navigate, signIn }) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
     >
-      {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
+      {({ handleSubmit }) => <SignUpForm onSubmit={handleSubmit} />}
     </Formik>
   );
 };
 
-const SignIn = () => {
+const SignUp = () => {
   const navigate = useNavigate();
-  const [signIn] = useSignIn();
+  const [signUp] = useSignUp();
 
-  return <SignInContainer navigate={() => navigate('/')} signIn={signIn} />;
+  return <SignUpContainer navigate={navigate} signUp={signUp} />;
 };
 
-export default SignIn;
+export default SignUp;

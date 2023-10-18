@@ -39,9 +39,14 @@ const AppBar = () => {
         </Link>
         <View style={styles.marginLeft}>
           {!me ? (
-            <Link to="/signIn">
-              <AppBarTab title="Sign In" />
-            </Link>
+            <View style={styles.row}>
+              <Link to="/signIn">
+                <AppBarTab title="Sign In" />
+              </Link>
+              <Link style={styles.marginLeft} to="/signUp">
+                <AppBarTab title="Sign Up" />
+              </Link>
+            </View>
           ) : (
             <View style={styles.row}>
               <Link to="/createReview">

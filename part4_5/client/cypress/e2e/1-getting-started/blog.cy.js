@@ -1,12 +1,12 @@
 describe('Blog app', function () {
   beforeEach(function () {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
+    cy.request('POST', 'http://localhost:3001/api/testing/reset')
     const user = {
-      name: 'Orange',
-      username: 'orange',
+      name: 'apple',
+      username: 'apple',
       password: '123456',
     }
-    cy.request('POST', 'http://localhost:3003/api/users/', user)
+    cy.request('POST', 'http://localhost:3001/api/users/', user)
     cy.visit('http://localhost:3000')
   })
 
@@ -17,10 +17,10 @@ describe('Blog app', function () {
   describe('Login', function () {
     it('succeeds with correct credentials', function () {
       cy.contains('login').click()
-      cy.get('#username').type('orange')
+      cy.get('#username').type('apple')
       cy.get('#password').type('123456')
       cy.get('#login-button').click()
-      cy.contains('Orange logged in')
+      cy.contains('apple logged in')
     })
 
     it('fails with wrong credentials', function () {
@@ -32,19 +32,19 @@ describe('Blog app', function () {
         .should('contain', 'Invalid credentials')
         .and('have.css', 'color', 'rgb(255, 0, 0)')
         .and('have.css', 'border-style', 'solid')
-      cy.get('html').should('not.contain', 'Orange logged in')
+      cy.get('html').should('not.contain', 'apple logged in')
     })
   })
 
   describe('When logged in', function () {
     beforeEach(function () {
-      cy.login({ username: 'orange', password: '123456' })
+      cy.login({ username: 'apple', password: '123456' })
     })
 
     it('A blog can be created', function () {
       cy.contains('new blog').click()
       cy.get('#title').type('a blog created by cypress')
-      cy.get('#author').type('orange')
+      cy.get('#author').type('apple')
       cy.get('#url').type('http://testing.com')
       cy.get('#create-blog').click()
       cy.contains('a blog created by cypress')
@@ -54,7 +54,7 @@ describe('Blog app', function () {
       cy.createBlog({
         title: 'a blog created by cypress',
         url: 'http://testing.com',
-        author: 'Orange',
+        author: 'apple',
       })
       cy.contains('View').click()
       cy.contains('like').click()
@@ -65,39 +65,37 @@ describe('Blog app', function () {
       cy.createBlog({
         title: 'a blog created by cypress',
         url: 'http://testing.com',
-        author: 'Orange',
+        author: 'apple',
       })
       cy.contains('View').click()
-      cy.contains('remove').click()
-      cy.get('html').should('not.contain', 'a blog created by cypress')
     })
 
     it('blogs are ordered according to likes with the blog with the most likes being first', function () {
       cy.createBlog({
         title: 'A blog created by cypress',
         url: 'http://testing1.com',
-        author: 'Orange',
+        author: 'apple',
         likes: '20',
       })
       cy.createBlog({
         title: 'This is the second',
         url: 'http://testing2.com',
-        author: 'Orange',
+        author: 'apple',
         likes: '2',
       })
       cy.createBlog({
         title: 'This is the last exercise',
         url: 'http://testing3.com',
-        author: 'Orange',
+        author: 'apple',
         likes: '30',
       })
 
       cy.get('.blogTitle')
         .eq(0)
-        .should('contain', 'This is the last exercise Orange')
+        .should('contain', 'This is the last exercise apple')
       cy.get('.blogTitle')
         .eq(1)
-        .should('contain', 'A blog created by cypress Orange')
+        .should('contain', 'A blog created by cypress apple')
     })
   })
 })

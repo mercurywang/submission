@@ -53,6 +53,8 @@
 
 ### Part11 CI/CD
 
+(a dedicated git repository)
+
 ### Part12 Containers
 
 ### Part13 Using relational databases

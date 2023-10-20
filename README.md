@@ -8,7 +8,7 @@
 - unicafe
 - anecdotes
 
-### Part2 Part 2
+### Part2 Communicating with server
 
 - phonebook
 - countries
@@ -17,7 +17,7 @@
 
 - [phonebook](https://github.com/mercurywang/phonebook) (a dedicated git repository)
 
-### Part4_5 Testing Express servers, user administration, Testing React apps
+### Part4 & Part5 Testing Express servers, user administration, Testing React apps
 
 - blog-server
 - blog-client
@@ -27,30 +27,32 @@
 - anecdotes
 - unicafe
 
-### Part7
+### Part7 React router, custom hooks, styling app with CSS and webpack
 
 - routed-anecdotes
 - country-hook
 - ultimate-hooks
 - blog
 
-### Part8
+### Part8 GraphQL
 
 - book
   - client
   - server
 
-### Part9
+### Part9 TypeScript
 
 - bmi
 - flight-diary
 - patientor
 - ts-app
 
-### Part10
+### Part10 React Native
 
-### Part11
+- rate-repository-app
 
-### Part12
+### Part11 CI/CD
 
-### Part13
+### Part12 Containers
+
+### Part13 Using relational databases

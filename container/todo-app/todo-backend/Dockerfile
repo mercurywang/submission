@@ -6,5 +6,4 @@ COPY . .
 
 RUN npm ci --omit=dev
 
-ENV DEBUG=:*
 CMD npm start
